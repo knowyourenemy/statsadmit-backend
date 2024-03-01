@@ -10,7 +10,7 @@ import { findUserById } from '../models/user.db';
 export const getProfile = async (profileId: string, userId: string): Promise<IProfile> => {
   const userData = await findUserById(userId);
   const profileData = await findProfileById(profileId);
-  if (userData.unlockedProfileIds.includes(profileId)) {
+  if (userData.unlockedProfileIds.includes(profileId) || userData.createdProfileIds.includes(profileId)) {
     return profileData;
   } else {
     return {

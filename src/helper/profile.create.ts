@@ -1,7 +1,7 @@
 import { WithId } from 'mongodb';
 import { AppError, BadRequestError, HelperError } from '../util/appError';
 import { IEssayResponse, IProfile, ITestScore, insertProfile } from '../models/profile.db';
-import { IUser, addUserProfile } from '../models/user.db';
+import { IUser, addCreatedProfile } from '../models/user.db';
 import { v4 as uuidv4 } from 'uuid';
 
 /**
@@ -39,7 +39,7 @@ export const createProfile = async (
       published: true,
     };
     await insertProfile(profileData);
-    await addUserProfile(userData.userId, profileId);
+    await addCreatedProfile(userData.userId, profileId);
     return profileId;
   } catch (e: any) {
     if (e instanceof AppError) {

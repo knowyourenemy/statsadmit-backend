@@ -1,4 +1,4 @@
-import { IUser, SESSION_DURATION, addUserProfile, checkUsernameExists, insertUser } from '../models/user.db';
+import { IUser, SESSION_DURATION, addCreatedProfile, checkUsernameExists, insertUser } from '../models/user.db';
 import { AppError, BadRequestError, HelperError } from '../util/appError';
 import { v4 as uuidv4 } from 'uuid';
 import bcrypt from 'bcrypt';

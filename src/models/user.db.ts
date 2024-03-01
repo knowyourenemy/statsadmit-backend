@@ -280,11 +280,11 @@ export const deleteUserSession = async (userId: string, sessionId: string) => {
 };
 
 /**
- * Add given profile ID to user with given userId.
+ * Add given profile ID to created profiles of user with given userId.
  * @param userId - User ID of user to update.
  * @param profileId - Profile ID.
  */
-export const addUserProfile = async (userId: string, profileId: string) => {
+export const addCreatedProfile = async (userId: string, profileId: string) => {
   try {
     const userCollection = getUserCollection();
     await userCollection.findOneAndUpdate(
@@ -294,6 +294,33 @@ export const addUserProfile = async (userId: string, profileId: string) => {
       {
         $push: {
           createdProfileIds: profileId,
+        },
+      },
+    );
+  } catch (e: any) {
+    if (e instanceof AppError) {
+      throw e;
+    } else {
+      throw new DbError(e.message);
+    }
+  }
+};
+
+/**
+ * Add given profile ID to unlocked profiles of user with given userId.
+ * @param userId - User ID of user to update.
+ * @param profileId - Profile ID.
+ */
+export const addUnlockedProfile = async (userId: string, profileId: string) => {
+  try {
+    const userCollection = getUserCollection();
+    await userCollection.findOneAndUpdate(
+      {
+        userId: userId,
+      },
+      {
+        $push: {
+          unlockedProfileIds: profileId,
         },
       },
     );
