@@ -1,4 +1,10 @@
-import { ISession, SESSION_DURATION, addUserSession, deleteExpiredUserSessions, findUser } from '../models/user.db';
+import {
+  ISession,
+  SESSION_DURATION,
+  addUserSession,
+  deleteExpiredUserSessions,
+  findUserByUsername,
+} from '../models/user.db';
 import { v4 as uuidv4 } from 'uuid';
 import { AppError, HelperError, NotFoundError } from '../util/appError';
 import bcrypt from 'bcrypt';
@@ -12,7 +18,7 @@ import bcrypt from 'bcrypt';
  */
 export const loginUser = async (username: string, password: string): Promise<string> => {
   try {
-    const user = await findUser(username);
+    const user = await findUserByUsername(username);
     const validPassword = await bcrypt.compare(password, user.password);
     if (!validPassword) {
       throw new NotFoundError('User not found.');

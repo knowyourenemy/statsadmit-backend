@@ -121,14 +121,38 @@ export const checkUsernameExists = async (username: string): Promise<boolean> =>
 
 /**
  * Find user with given username.
- * @param userId - Username of user.
+ * @param username - Username of user.
  * @returns {WithId<IUser>} - User document.
  */
-export const findUser = async (username: string): Promise<WithId<IUser>> => {
+export const findUserByUsername = async (username: string): Promise<WithId<IUser>> => {
   try {
     const userCollection = getUserCollection();
     const user = await userCollection.findOne({
       username: username,
+    });
+    if (!user) {
+      throw new NotFoundError('User not found.');
+    }
+    return user;
+  } catch (e: any) {
+    if (e instanceof AppError) {
+      throw e;
+    } else {
+      throw new DbError(e.message);
+    }
+  }
+};
+
+/**
+ * Find user with given userId.
+ * @param userId - User ID of user.
+ * @returns {WithId<IUser>} - User document.
+ */
+export const findUserById = async (userId: string): Promise<WithId<IUser>> => {
+  try {
+    const userCollection = getUserCollection();
+    const user = await userCollection.findOne({
+      userId: userId,
     });
     if (!user) {
       throw new NotFoundError('User not found.');
