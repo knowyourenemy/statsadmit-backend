@@ -3,6 +3,7 @@ import { AppError, BadRequestError, RouteError } from '../util/appError';
 import { authenticateAll } from '../middleware/authenticate';
 import { createProfile } from '../helper/profile.create';
 import { getProfile } from '../helper/profile.get';
+import { getAllProfilePreviews } from '../models/profile.db';
 
 const router = express.Router();
 
@@ -55,6 +56,23 @@ router
       }
       const profileData = await getProfile(req.params.profileId, req.user!.userId);
       return res.status(200).send(profileData);
+    } catch (e: any) {
+      if (e instanceof AppError) {
+        next(e);
+      } else {
+        next(new RouteError(e.message));
+      }
+    }
+  })
+  /**
+   * GET /api/profile/
+   * @returns {IProfilePreview[]} Profile previews.
+   * Get all profile previews.
+   */
+  .get('/', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const profilePreviews = await getAllProfilePreviews();
+      return res.status(200).send(profilePreviews);
     } catch (e: any) {
       if (e instanceof AppError) {
         next(e);

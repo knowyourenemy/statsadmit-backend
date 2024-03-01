@@ -49,13 +49,27 @@ export const insertProfile = async (profileData: IProfile): Promise<void> => {
 };
 
 /**
- * Get all profiles.
- * @returns {WithId<IProfile>[]} All profiles.
+ * Get all profile previews.
+ * @returns {WithId<IProfile>[]} All profile previews.
  */
-export const getAllProfiles = async (): Promise<WithId<IProfile>[]> => {
+export const getAllProfilePreviews = async (): Promise<WithId<IProfilePreview>[]> => {
   try {
     const profileCollection = getProfileCollection();
-    const profiles = await profileCollection.find().sort({ purchaseCount: -1 }).toArray();
+    const profiles = await profileCollection
+      .find(
+        {},
+        {
+          projection: {
+            profileId: 1,
+            userName: 1,
+            price: 1,
+            schoolAdmitted: 1,
+            purchaseCount: 1,
+          },
+        },
+      )
+      .sort({ purchaseCount: -1 })
+      .toArray();
     return profiles;
   } catch (e: any) {
     if (e instanceof AppError) {
