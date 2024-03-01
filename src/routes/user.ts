@@ -1,7 +1,7 @@
 import express, { Request, Response, NextFunction } from 'express';
 import { authenticateAll } from '../middleware/authenticate';
 import { AppError, BadRequestError, RouteError } from '../util/appError';
-import { addUnlockedProfile, deleteUserSession } from '../models/user.db';
+import { addSavedProfile, addUnlockedProfile, deleteUserSession } from '../models/user.db';
 import { createUser } from '../helper/user.create';
 import { loginUser } from '../helper/user.login';
 import { profile } from 'console';
@@ -95,6 +95,26 @@ router
       }
       // TODO ensure profile exists and has not already been unlocked.
       await addUnlockedProfile(req.user!.userId, req.params.profileId);
+      return res.sendStatus(200);
+    } catch (e: any) {
+      if (e instanceof AppError) {
+        next(e);
+      } else {
+        next(new RouteError(e.message));
+      }
+    }
+  })
+  /**
+   * PUT /api/user/save/:profileId
+   * Save profile.
+   */
+  .put('/save/:profileId', authenticateAll, async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      if (!req.params.profileId) {
+        throw new BadRequestError('Incomplete information to process request.');
+      }
+      // TODO ensure profile exists and has not already been unlocked.
+      await addSavedProfile(req.user!.userId, req.params.profileId);
       return res.sendStatus(200);
     } catch (e: any) {
       if (e instanceof AppError) {

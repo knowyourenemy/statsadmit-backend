@@ -332,3 +332,30 @@ export const addUnlockedProfile = async (userId: string, profileId: string) => {
     }
   }
 };
+
+/**
+ * Add given profile ID to saved profiles of user with given userId.
+ * @param userId - User ID of user to update.
+ * @param profileId - Profile ID.
+ */
+export const addSavedProfile = async (userId: string, profileId: string) => {
+  try {
+    const userCollection = getUserCollection();
+    await userCollection.findOneAndUpdate(
+      {
+        userId: userId,
+      },
+      {
+        $push: {
+          savedProfileIds: profileId,
+        },
+      },
+    );
+  } catch (e: any) {
+    if (e instanceof AppError) {
+      throw e;
+    } else {
+      throw new DbError(e.message);
+    }
+  }
+};
