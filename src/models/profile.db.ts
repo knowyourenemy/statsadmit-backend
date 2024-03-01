@@ -81,6 +81,38 @@ export const getAllProfilePreviews = async (): Promise<WithId<IProfilePreview>[]
 };
 
 /**
+ * Get profile previews for profiles in given list of profile IDs.
+ * @param {string[]} profileIds - Profile IDs of profile previews to fetch.
+ * @returns {WithId<IProfile>[]} Profile previews.
+ */
+export const getProfilePreviews = async (profileIds: string[]): Promise<WithId<IProfilePreview>[]> => {
+  try {
+    const profileCollection = getProfileCollection();
+    const profiles = await profileCollection
+      .find(
+        { profileId: { $in: profileIds } },
+        {
+          projection: {
+            profileId: 1,
+            userName: 1,
+            price: 1,
+            schoolAdmitted: 1,
+            purchaseCount: 1,
+          },
+        },
+      )
+      .toArray();
+    return profiles;
+  } catch (e: any) {
+    if (e instanceof AppError) {
+      throw e;
+    } else {
+      throw new DbError(e.message);
+    }
+  }
+};
+
+/**
  * Find profile by ID.
  * @param {string} profileId - profile ID
  * @returns {WithId<IProfile>} profile with matching profile ID.

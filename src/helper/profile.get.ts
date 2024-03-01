@@ -1,4 +1,4 @@
-import { IProfile, findProfileById } from '../models/profile.db';
+import { IProfile, IProfilePreview, findProfileById, getProfilePreviews } from '../models/profile.db';
 import { findUserById } from '../models/user.db';
 
 /**
@@ -29,4 +29,26 @@ export const getProfile = async (profileId: string, userId: string): Promise<IPr
       }),
     };
   }
+};
+
+/**
+ * Get profile previews of unlocked profiles.
+ * @param userId - User ID.
+ * @returns {IProfilePreview} Profile preview data.
+ */
+export const getUnlockedProfilePreviews = async (userId: string): Promise<IProfilePreview[]> => {
+  const userData = await findUserById(userId);
+  const profilePreviews = await getProfilePreviews(userData.unlockedProfileIds);
+  return profilePreviews;
+};
+
+/**
+ * Get profile previews of saved profiles.
+ * @param userId - User ID.
+ * @returns {IProfilePreview} Profile preview data.
+ */
+export const getSavedProfilePreviews = async (userId: string): Promise<IProfilePreview[]> => {
+  const userData = await findUserById(userId);
+  const profilePreviews = await getProfilePreviews(userData.savedProfileIds);
+  return profilePreviews;
 };

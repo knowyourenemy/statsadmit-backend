@@ -2,7 +2,7 @@ import express, { Request, Response, NextFunction } from 'express';
 import { AppError, BadRequestError, RouteError } from '../util/appError';
 import { authenticateAll } from '../middleware/authenticate';
 import { createProfile } from '../helper/profile.create';
-import { getProfile } from '../helper/profile.get';
+import { getProfile, getSavedProfilePreviews, getUnlockedProfilePreviews } from '../helper/profile.get';
 import { getAllProfilePreviews } from '../models/profile.db';
 
 const router = express.Router();
@@ -35,6 +35,41 @@ router
         req.user!,
       );
       return res.status(200).send({ profileId: profileId });
+    } catch (e: any) {
+      if (e instanceof AppError) {
+        next(e);
+      } else {
+        next(new RouteError(e.message));
+      }
+    }
+  })
+
+  /**
+   * GET /api/profile/unlocked
+   * @returns {IProfilePreview[]} Profile previews.
+   * Get unlocked profile previews.
+   */
+  .get('/unlocked', authenticateAll, async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const profilePreviews = await getUnlockedProfilePreviews(req.user!.userId);
+      return res.status(200).send(profilePreviews);
+    } catch (e: any) {
+      if (e instanceof AppError) {
+        next(e);
+      } else {
+        next(new RouteError(e.message));
+      }
+    }
+  })
+  /**
+   * GET /api/profile/saved
+   * @returns {IProfilePreview[]} Profile previews.
+   * Get saved profile previews.
+   */
+  .get('/saved', authenticateAll, async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const profilePreviews = await getSavedProfilePreviews(req.user!.userId);
+      return res.status(200).send(profilePreviews);
     } catch (e: any) {
       if (e instanceof AppError) {
         next(e);
