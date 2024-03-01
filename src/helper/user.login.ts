@@ -17,13 +17,13 @@ export const loginUser = async (username: string, password: string): Promise<str
     if (!validPassword) {
       throw new NotFoundError('User not found.');
     }
-    await deleteExpiredUserSessions(user._id);
+    await deleteExpiredUserSessions(user.userId);
     const sessionId = uuidv4();
     const session: ISession = {
       sessionId: sessionId,
       expiry: Date.now() + SESSION_DURATION,
     };
-    await addUserSession(user._id, session);
+    await addUserSession(user.userId, session);
     return sessionId;
   } catch (e: any) {
     if (e instanceof AppError) {

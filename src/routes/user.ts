@@ -43,7 +43,7 @@ router.delete('/logout', authenticateAll, async (req: Request, res: Response, ne
     if (!req.cookies['sessionId']) {
       throw new BadRequestError('Incomplete information to process request.');
     }
-    await deleteUserSession(req.user!._id, req.cookies['sessionId']);
+    await deleteUserSession(req.user!.userId, req.cookies['sessionId']);
     return res.clearCookie('sessionId').sendStatus(200);
   } catch (e: any) {
     if (e instanceof AppError) {

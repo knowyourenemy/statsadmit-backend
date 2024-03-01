@@ -1,4 +1,4 @@
-import { IUser, SESSION_DURATION, checkUsernameExists, insertUser } from '../models/user.db';
+import { IUser, SESSION_DURATION, addUserProfile, checkUsernameExists, insertUser } from '../models/user.db';
 import { AppError, BadRequestError, HelperError } from '../util/appError';
 import { v4 as uuidv4 } from 'uuid';
 import bcrypt from 'bcrypt';
@@ -25,8 +25,10 @@ export const createUser = async (username: string, password: string, email: stri
       throw new BadRequestError('User already exists.');
     }
     const sessionId = uuidv4();
+    const userId = uuidv4();
     const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
     const newUser: IUser = {
+      userId: userId,
       username: username,
       password: hashedPassword,
       sessions: [
@@ -36,9 +38,9 @@ export const createUser = async (username: string, password: string, email: stri
         },
       ],
       email: email,
-      personalProfiles: [],
-      savedProfiles: [],
-      unlockedProfiles: [],
+      createdProfileIds: [],
+      savedProfileIds: [],
+      unlockedProfileIds: [],
     };
     await insertUser(newUser);
     return sessionId;

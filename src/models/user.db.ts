@@ -1,4 +1,4 @@
-import { ObjectId, WithId } from 'mongodb';
+import { WithId } from 'mongodb';
 import { getUserCollection } from '../db';
 import { AppError, BadRequestError, DbError, NotFoundError } from '../util/appError';
 import { IProfile } from './profile.db';
@@ -12,13 +12,14 @@ export interface ISession {
 }
 
 export interface IUser {
+  userId: string;
   username: string;
   password: string;
   sessions: ISession[];
   email: string;
-  personalProfiles: IProfile[];
-  savedProfiles: IProfile[];
-  unlockedProfiles: IProfile[];
+  createdProfileIds: string[];
+  savedProfileIds: string[];
+  unlockedProfileIds: string[];
 }
 /**
  * Insert new user into DB.
@@ -170,14 +171,14 @@ export const refreshUserSession = async (sessionId: string): Promise<void> => {
 
 /**
  * Delete all expired sessions for user with given userId.
- * @param userId Object Id of user to delete expired sessions for.
+ * @param userId user Id of user to delete expired sessions for.
  */
-export const deleteExpiredUserSessions = async (userId: ObjectId) => {
+export const deleteExpiredUserSessions = async (userId: string) => {
   try {
     const userCollection = getUserCollection();
     await userCollection.findOneAndUpdate(
       {
-        _id: userId,
+        userId: userId,
       },
       {
         $pull: {
@@ -200,15 +201,15 @@ export const deleteExpiredUserSessions = async (userId: ObjectId) => {
 
 /**
  * Add given session to user with given userId.
- * @param userId - Object ID of user to update.
+ * @param userId - User ID of user to update.
  * @param session - session document.
  */
-export const addUserSession = async (userId: ObjectId, session: ISession) => {
+export const addUserSession = async (userId: string, session: ISession) => {
   try {
     const userCollection = getUserCollection();
     await userCollection.findOneAndUpdate(
       {
-        _id: userId,
+        userId: userId,
       },
       {
         $push: {
@@ -227,10 +228,10 @@ export const addUserSession = async (userId: ObjectId, session: ISession) => {
 
 /**
  * delete given session from user with given userId.
- * @param userId - Object Id of user to update.
+ * @param userId - User Id of user to update.
  * @param sessionId - session ID to delete.
  */
-export const deleteUserSession = async (userId: ObjectId, sessionId: string) => {
+export const deleteUserSession = async (userId: string, sessionId: string) => {
   try {
     const userCollection = getUserCollection();
     await userCollection.findOneAndUpdate(
@@ -242,6 +243,33 @@ export const deleteUserSession = async (userId: ObjectId, sessionId: string) => 
           sessions: {
             sessionId: sessionId,
           },
+        },
+      },
+    );
+  } catch (e: any) {
+    if (e instanceof AppError) {
+      throw e;
+    } else {
+      throw new DbError(e.message);
+    }
+  }
+};
+
+/**
+ * Add given profile ID to user with given userId.
+ * @param userId - User ID of user to update.
+ * @param profileId - Profile ID.
+ */
+export const addUserProfile = async (userId: string, profileId: string) => {
+  try {
+    const userCollection = getUserCollection();
+    await userCollection.findOneAndUpdate(
+      {
+        userId: userId,
+      },
+      {
+        $push: {
+          createdProfileIds: profileId,
         },
       },
     );
