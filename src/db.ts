@@ -2,10 +2,12 @@ import { MongoClient, Db, Collection } from 'mongodb';
 import { AppError, DbError, MissingEnvError } from './util/appError';
 import dotenv from 'dotenv';
 import { IUser } from './models/user.db';
+import { IProfile } from './models/profile.db';
 
 let dbConnection: Db;
 let client: MongoClient;
 let userCollection: Collection<IUser>;
+let profileCollection: Collection<IProfile>;
 
 dotenv.config();
 
@@ -19,6 +21,8 @@ export const connectToDatabase = async (uri: string) => {
 
     dbConnection = client.db(process.env.DB_NAME || 'admit-asia-prod');
     userCollection = dbConnection.collection(process.env.USER_COLLECTION_NAME || 'users');
+    profileCollection = dbConnection.collection(process.env.PROFILE_COLLECTION_NAME || 'profiles');
+
     console.log(`Successfully connected to database: ${dbConnection.databaseName}.`);
   } catch (e: any) {
     if (e instanceof AppError) {
@@ -31,6 +35,10 @@ export const connectToDatabase = async (uri: string) => {
 
 export const getUserCollection = (): Collection<IUser> => {
   return userCollection;
+};
+
+export const getProfileCollection = (): Collection<IProfile> => {
+  return profileCollection;
 };
 
 /**
