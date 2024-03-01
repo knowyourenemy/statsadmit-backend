@@ -67,11 +67,11 @@ export const getAllProfiles = async (): Promise<WithId<IProfile>[]> => {
 };
 
 /**
- * Get profile by ID.
+ * Find profile by ID.
  * @param {string} profileId - profile ID
  * @returns {WithId<IProfile>} profile with matching profile ID.
  */
-export const getProfileById = async (profileId: string): Promise<WithId<IProfile>> => {
+export const findProfileById = async (profileId: string): Promise<WithId<IProfile>> => {
   try {
     const profileCollection = getProfileCollection();
     const profile = await profileCollection.findOne({ profileId: profileId });
