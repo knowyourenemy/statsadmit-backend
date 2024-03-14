@@ -42,14 +42,24 @@
 ```{json}
 {
     price: number,
-    schoolAdmitted: string,
-    schoolCountry: string,
-    essayResponses: [
+    schoolsAdmitted: [
         {
-            question: string,
-            response: string,
-        },
+            name: string,
+            degree: string,
+            major: string,
+            status: string,
+            essays: [
+                {
+                    title: string,
+                    content: string
+                }
+            ]
+        }
     ],
+    schoolCountry: string,
+    currentMajor: string,
+    currentSchool: string,
+    currentDescription: string,
     testScores: [
         {
             test: string,
@@ -81,25 +91,36 @@
 {
     profileId: string,
     userId: string,
-    userName: string,
+    username: string,
     dateCreated: number,
     price: number,
-    schoolAdmitted: string,
+    schoolsAdmitted: [
+        {
+            name: string,
+            degree: string,
+            major: string,
+            status: string,
+            essays: [
+                {
+                    title: string,
+                    content: string
+                }
+            ]
+        }
+    ],
     schoolCountry: string,
     purchaseCount: number,
-    essayResponses: [
-        {
-            question: string,
-            response: string,
-        },
-    ],
     testScores: [
         {
             test: string,
             score: string
         },
     ],
-    published: boolean
+    published: boolean,
+    currentSchool: string,
+    currentMajor: string,
+    currentDescription: string,
+    imageUrl: string
 }
 ```
 
@@ -118,10 +139,18 @@
 [
     {
         profileId: string,
-        userName: string,
+        username: string,
         price: number,
-        schoolAdmitted: string,
+        schoolsAdmitted: [
+            {
+                name: string,
+                degree: string,
+                major: string,
+                status: string,
+            }
+        ],
         purchaseCount: number,
+        imageUrl: string
     }
 ]
 ```
@@ -136,10 +165,18 @@
 [
     {
         profileId: string,
-        userName: string,
+        username: string,
         price: number,
-        schoolAdmitted: string,
+        schoolsAdmitted: [
+            {
+                name: string,
+                degree: string,
+                major: string,
+                status: string,
+            }
+        ],
         purchaseCount: number,
+        imageUrl: string
     }
 ]
 ```
@@ -147,6 +184,7 @@
 ### Remarks
 
 - User needs to be logged in
+- Essays have been deliberately excluded from schoolsAdmitted
 
 ## Get Saved Profile Previews
 
@@ -158,10 +196,18 @@
 [
     {
         profileId: string,
-        userName: string,
+        username: string,
         price: number,
-        schoolAdmitted: string,
+        schoolsAdmitted: [
+            {
+                name: string,
+                degree: string,
+                major: string,
+                status: string,
+            }
+        ],
         purchaseCount: number,
+        imageUrl: string
     }
 ]
 ```
@@ -169,6 +215,7 @@
 ### Remarks
 
 - User needs to be logged in
+- Essays have been deliberately excluded from schoolsAdmitted
 
 ## Unlock Profile
 
@@ -185,3 +232,4 @@
 ### Remarks
 
 - User needs to be logged in
+- Essays have been deliberately excluded from schoolsAdmitted

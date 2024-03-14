@@ -1,4 +1,10 @@
-import { IProfile, IProfilePreview, findProfileById, getProfilePreviews } from '../models/profile.db';
+import {
+  IProfile,
+  IProfilePreview,
+  findProfileById,
+  getAllProfilePreviews,
+  getProfilePreviews,
+} from '../models/profile.db';
 import { findUserById } from '../models/user.db';
 
 /**
@@ -15,10 +21,21 @@ export const getProfile = async (profileId: string, userId: string): Promise<IPr
   } else {
     return {
       ...profileData,
-      essayResponses: profileData.essayResponses.map((essay) => {
+      // essayResponses: profileData.essayResponses.map((essay) => {
+      //   return {
+      //     question: essay.question,
+      //     response: essay.response.slice(0, 10),
+      //   };
+      // }),
+      schoolsAdmitted: profileData.schoolsAdmitted.map((schoolAdmitted) => {
         return {
-          question: essay.question,
-          response: essay.response.slice(0, 10),
+          ...schoolAdmitted,
+          essays: schoolAdmitted.essays.map((essay) => {
+            return {
+              title: essay.title,
+              content: essay.content.slice(0, 10),
+            };
+          }),
         };
       }),
       testScores: profileData.testScores.map((test) => {
@@ -30,6 +47,24 @@ export const getProfile = async (profileId: string, userId: string): Promise<IPr
     };
   }
 };
+
+// /**
+//  * Get all profile previews
+//  * @returns {IProfilePreview} Profile preview data.
+//  */
+// export const getAllPreviews = async (): Promise<IProfilePreview[]> => {
+//   const profilePreviews = await getAllProfilePreviews();
+//   return profilePreviews.map((preview) => {
+//     return {
+//       ...preview,
+//       schoolsAdmitted: preview.schoolsAdmitted.map((schoolAdmitted) => {
+//         ...schoolAdmitted,
+
+//       })
+//     }
+//   })
+//   return profilePreviews;
+// };
 
 /**
  * Get profile previews of unlocked profiles.

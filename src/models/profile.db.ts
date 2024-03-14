@@ -6,19 +6,22 @@ export interface IProfile {
   profileId: string;
   userId: string;
   dateCreated: number;
-  userName: string;
+  username: string;
   price: number;
-  schoolAdmitted: string;
+  schoolsAdmitted: ISchoolAdmitted[];
   schoolCountry: string;
   purchaseCount: number;
-  essayResponses: IEssayResponse[];
   testScores: ITestScore[];
   published: boolean;
+  currentSchool: string;
+  currentMajor: string;
+  currentDescription: string;
+  imageUrl: string;
 }
 
 export interface IEssayResponse {
-  question: string;
-  response: string;
+  title: string;
+  content: string;
 }
 
 export interface ITestScore {
@@ -26,7 +29,18 @@ export interface ITestScore {
   score: string;
 }
 
-export type IProfilePreview = Pick<IProfile, 'profileId' | 'userName' | 'price' | 'schoolAdmitted' | 'purchaseCount'>;
+export interface ISchoolAdmitted {
+  name: string;
+  degree: string;
+  major: string;
+  status: 'Accepted' | 'Rejected';
+  essays: IEssayResponse[];
+}
+
+export type IProfilePreview = Pick<
+  IProfile,
+  'profileId' | 'username' | 'price' | 'schoolsAdmitted' | 'currentSchool' | 'imageUrl'
+>;
 
 /**
  * Insert new profile into DB
@@ -61,13 +75,17 @@ export const getAllProfilePreviews = async (): Promise<WithId<IProfilePreview>[]
         {
           projection: {
             profileId: 1,
-            userName: 1,
+            username: 1,
             price: 1,
-            schoolAdmitted: 1,
+            schoolsAdmitted: 1,
             purchaseCount: 1,
+            imageUrl: 1,
           },
         },
       )
+      .project<WithId<IProfilePreview>>({
+        'schoolsAdmitted.essays': 0,
+      })
       .sort({ purchaseCount: -1 })
       .toArray();
     return profiles;
@@ -94,13 +112,17 @@ export const getProfilePreviews = async (profileIds: string[]): Promise<WithId<I
         {
           projection: {
             profileId: 1,
-            userName: 1,
+            username: 1,
             price: 1,
-            schoolAdmitted: 1,
+            schoolsAdmitted: 1,
             purchaseCount: 1,
+            imageUrl: 1,
           },
         },
       )
+      .project<WithId<IProfilePreview>>({
+        'schoolsAdmitted.essays': 0,
+      })
       .toArray();
     return profiles;
   } catch (e: any) {

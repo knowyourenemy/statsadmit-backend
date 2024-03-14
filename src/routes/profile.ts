@@ -19,19 +19,23 @@ router
     try {
       if (
         !req.body.price ||
-        !req.body.schoolAdmitted ||
+        !req.body.schoolsAdmitted ||
         !req.body.schoolCountry ||
-        !req.body.essayResponses ||
-        !req.body.testScores
+        !req.body.testScores ||
+        !req.body.currentSchool ||
+        !req.body.currentMajor ||
+        !req.body.currentDescription
       ) {
         throw new BadRequestError('Incomplete information to process request.');
       }
       const profileId = await createProfile(
         req.body.price,
-        req.body.schoolAdmitted,
+        req.body.schoolsAdmitted,
         req.body.schoolCountry,
-        req.body.essayResponses,
         req.body.testScores,
+        req.body.currentSchool,
+        req.body.currentMajor,
+        req.body.currentDescription,
         req.user!,
       );
       return res.status(200).send({ profileId: profileId });

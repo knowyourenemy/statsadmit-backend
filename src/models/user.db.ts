@@ -20,6 +20,7 @@ export interface IUser {
   createdProfileIds: string[];
   savedProfileIds: string[];
   unlockedProfileIds: string[];
+  imageUrl: string;
 }
 /**
  * Insert new user into DB.

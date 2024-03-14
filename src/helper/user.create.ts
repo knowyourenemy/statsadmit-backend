@@ -5,6 +5,8 @@ import bcrypt from 'bcrypt';
 
 const SALT_ROUNDS = 10;
 
+const DUMMY_IMG_URL = 'https://i.pravatar.cc/150?img=';
+
 /**
  * Create a new user
  * @param userData - User document.
@@ -41,6 +43,7 @@ export const createUser = async (username: string, password: string, email: stri
       createdProfileIds: [],
       savedProfileIds: [],
       unlockedProfileIds: [],
+      imageUrl: DUMMY_IMG_URL + (Math.floor(Math.random() * 50) + 1),
     };
     await insertUser(newUser);
     return sessionId;
