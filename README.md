@@ -147,6 +147,7 @@
                 degree: string,
                 major: string,
                 status: string,
+                essays: [],
             }
         ],
         purchaseCount: number,
@@ -173,6 +174,7 @@
                 degree: string,
                 major: string,
                 status: string,
+                essays: [],
             }
         ],
         purchaseCount: number,
@@ -204,6 +206,7 @@
                 degree: string,
                 major: string,
                 status: string,
+                essays: [],
             }
         ],
         purchaseCount: number,

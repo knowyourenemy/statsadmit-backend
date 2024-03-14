@@ -2,7 +2,7 @@ import express, { Request, Response, NextFunction } from 'express';
 import { AppError, BadRequestError, RouteError } from '../util/appError';
 import { authenticateAll } from '../middleware/authenticate';
 import { createProfile } from '../helper/profile.create';
-import { getProfile, getSavedProfilePreviews, getUnlockedProfilePreviews } from '../helper/profile.get';
+import { getAllPreviews, getProfile, getSavedProfilePreviews, getUnlockedProfilePreviews } from '../helper/profile.get';
 import { getAllProfilePreviews } from '../models/profile.db';
 
 const router = express.Router();
@@ -110,7 +110,7 @@ router
    */
   .get('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const profilePreviews = await getAllProfilePreviews();
+      const profilePreviews = await getAllPreviews();
       return res.status(200).send(profilePreviews);
     } catch (e: any) {
       if (e instanceof AppError) {

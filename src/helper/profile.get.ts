@@ -7,6 +7,18 @@ import {
 } from '../models/profile.db';
 import { findUserById } from '../models/user.db';
 
+const removeEssays = (profilePreview: IProfilePreview) => {
+  return {
+    ...profilePreview,
+    schoolsAdmitted: profilePreview.schoolsAdmitted.map((school) => {
+      return {
+        ...school,
+        essays: [],
+      };
+    }),
+  };
+};
+
 /**
  * Get profile details. Returns full profile if profile is unlocked, and modified profile (with essays and test scores hidden) otherwise.
  * @param profileId - Profile ID.
@@ -48,23 +60,16 @@ export const getProfile = async (profileId: string, userId: string): Promise<IPr
   }
 };
 
-// /**
-//  * Get all profile previews
-//  * @returns {IProfilePreview} Profile preview data.
-//  */
-// export const getAllPreviews = async (): Promise<IProfilePreview[]> => {
-//   const profilePreviews = await getAllProfilePreviews();
-//   return profilePreviews.map((preview) => {
-//     return {
-//       ...preview,
-//       schoolsAdmitted: preview.schoolsAdmitted.map((schoolAdmitted) => {
-//         ...schoolAdmitted,
-
-//       })
-//     }
-//   })
-//   return profilePreviews;
-// };
+/**
+ * Get all profile previews
+ * @returns {IProfilePreview} Profile preview data.
+ */
+export const getAllPreviews = async (): Promise<IProfilePreview[]> => {
+  const profilePreviews = await getAllProfilePreviews();
+  return profilePreviews.map((preview) => {
+    return removeEssays(preview);
+  });
+};
 
 /**
  * Get profile previews of unlocked profiles.
@@ -74,7 +79,9 @@ export const getProfile = async (profileId: string, userId: string): Promise<IPr
 export const getUnlockedProfilePreviews = async (userId: string): Promise<IProfilePreview[]> => {
   const userData = await findUserById(userId);
   const profilePreviews = await getProfilePreviews(userData.unlockedProfileIds);
-  return profilePreviews;
+  return profilePreviews.map((preview) => {
+    return removeEssays(preview);
+  });
 };
 
 /**
@@ -85,5 +92,7 @@ export const getUnlockedProfilePreviews = async (userId: string): Promise<IProfi
 export const getSavedProfilePreviews = async (userId: string): Promise<IProfilePreview[]> => {
   const userData = await findUserById(userId);
   const profilePreviews = await getProfilePreviews(userData.savedProfileIds);
-  return profilePreviews;
+  return profilePreviews.map((preview) => {
+    return removeEssays(preview);
+  });
 };

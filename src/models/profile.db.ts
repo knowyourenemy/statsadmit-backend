@@ -83,9 +83,6 @@ export const getAllProfilePreviews = async (): Promise<WithId<IProfilePreview>[]
           },
         },
       )
-      .project<WithId<IProfilePreview>>({
-        'schoolsAdmitted.essays': 0,
-      })
       .sort({ purchaseCount: -1 })
       .toArray();
     return profiles;
@@ -120,9 +117,6 @@ export const getProfilePreviews = async (profileIds: string[]): Promise<WithId<I
           },
         },
       )
-      .project<WithId<IProfilePreview>>({
-        'schoolsAdmitted.essays': 0,
-      })
       .toArray();
     return profiles;
   } catch (e: any) {
