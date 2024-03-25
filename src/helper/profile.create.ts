@@ -30,7 +30,7 @@ export const createProfile = async (
     const profileData: IProfile = {
       profileId: profileId,
       userId: userData.userId,
-      username: userData.username,
+      name: userData.username,
       dateCreated: Date.now(),
       price: price,
       schoolsAdmitted: schoolsAdmitted,

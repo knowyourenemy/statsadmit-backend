@@ -1,6 +1,7 @@
 import {
   IProfile,
   IProfilePreview,
+  IProfileWithOwned,
   findProfileById,
   getAllProfilePreviews,
   getProfilePreviews,
@@ -23,13 +24,21 @@ const removeEssays = (profilePreview: IProfilePreview) => {
  * Get profile details. Returns full profile if profile is unlocked, and modified profile (with essays and test scores hidden) otherwise.
  * @param profileId - Profile ID.
  * @param userId - User ID.
- * @returns {IProfile} Profile Data.
+ * @returns {IProfileWithOwned} Profile Data.
  */
-export const getProfile = async (profileId: string, userId: string): Promise<IProfile> => {
+export const getProfile = async (profileId: string, userId: string): Promise<IProfileWithOwned> => {
   const userData = await findUserById(userId);
   const profileData = await findProfileById(profileId);
-  if (userData.unlockedProfileIds.includes(profileId) || userData.createdProfileIds.includes(profileId)) {
-    return profileData;
+  if (userData.createdProfileIds.includes(profileId)) {
+    return {
+      ...profileData,
+      isOwned: true,
+    };
+  } else if (userData.unlockedProfileIds.includes(profileId)) {
+    return {
+      ...profileData,
+      isOwned: false,
+    };
   } else {
     return {
       ...profileData,
@@ -56,6 +65,7 @@ export const getProfile = async (profileId: string, userId: string): Promise<IPr
           score: '',
         };
       }),
+      isOwned: false,
     };
   }
 };

@@ -6,7 +6,7 @@ export interface IProfile {
   profileId: string;
   userId: string;
   dateCreated: number;
-  username: string;
+  name: string;
   price: number;
   schoolsAdmitted: ISchoolAdmitted[];
   schoolCountry: string;
@@ -17,6 +17,10 @@ export interface IProfile {
   currentMajor: string;
   currentDescription: string;
   imageUrl: string;
+}
+
+export interface IProfileWithOwned extends IProfile {
+  isOwned: boolean;
 }
 
 export interface IEssayResponse {
@@ -39,7 +43,7 @@ export interface ISchoolAdmitted {
 
 export type IProfilePreview = Pick<
   IProfile,
-  'profileId' | 'username' | 'price' | 'schoolsAdmitted' | 'currentSchool' | 'imageUrl'
+  'profileId' | 'name' | 'price' | 'schoolsAdmitted' | 'currentSchool' | 'imageUrl'
 >;
 
 /**
@@ -75,11 +79,12 @@ export const getAllProfilePreviews = async (): Promise<WithId<IProfilePreview>[]
         {
           projection: {
             profileId: 1,
-            username: 1,
+            name: 1,
             price: 1,
             schoolsAdmitted: 1,
             purchaseCount: 1,
             imageUrl: 1,
+            currentSchool: 1,
           },
         },
       )
@@ -109,7 +114,7 @@ export const getProfilePreviews = async (profileIds: string[]): Promise<WithId<I
         {
           projection: {
             profileId: 1,
-            username: 1,
+            name: 1,
             price: 1,
             schoolsAdmitted: 1,
             purchaseCount: 1,

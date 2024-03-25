@@ -85,7 +85,7 @@ router
   /**
    * GET /api/profile/:profileId
    * @param {string} profileId - Profile ID.
-   * @returns {IProfile} Profile data.
+   * @returns {IProfileWithOwned} Profile data.
    * Get profile data.
    */
   .get('/:profileId', authenticateAll, async (req: Request, res: Response, next: NextFunction) => {
