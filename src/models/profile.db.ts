@@ -19,8 +19,10 @@ export interface IProfile {
   imageUrl: string;
 }
 
-export interface IProfileWithOwned extends IProfile {
+export interface IProfileAuthenticated extends IProfile {
   isOwned: boolean;
+  isUnlocked: boolean;
+  isSaved: boolean;
 }
 
 export interface IEssayResponse {

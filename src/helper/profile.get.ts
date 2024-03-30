@@ -1,7 +1,7 @@
 import {
   IProfile,
   IProfilePreview,
-  IProfileWithOwned,
+  IProfileAuthenticated,
   findProfileById,
   getAllProfilePreviews,
   getProfilePreviews,
@@ -24,20 +24,24 @@ const removeEssays = (profilePreview: IProfilePreview) => {
  * Get profile details. Returns full profile if profile is unlocked, and modified profile (with essays and test scores hidden) otherwise.
  * @param profileId - Profile ID.
  * @param userId - User ID.
- * @returns {IProfileWithOwned} Profile Data.
+ * @returns {IProfileAuthenticated} Profile Data.
  */
-export const getProfile = async (profileId: string, userId: string): Promise<IProfileWithOwned> => {
+export const getProfile = async (profileId: string, userId: string): Promise<IProfileAuthenticated> => {
   const userData = await findUserById(userId);
   const profileData = await findProfileById(profileId);
   if (userData.createdProfileIds.includes(profileId)) {
     return {
       ...profileData,
       isOwned: true,
+      isUnlocked: userData.unlockedProfileIds.includes(profileId),
+      isSaved: userData.savedProfileIds.includes(profileId),
     };
   } else if (userData.unlockedProfileIds.includes(profileId)) {
     return {
       ...profileData,
       isOwned: false,
+      isUnlocked: true,
+      isSaved: userData.savedProfileIds.includes(profileId),
     };
   } else {
     return {
@@ -66,6 +70,8 @@ export const getProfile = async (profileId: string, userId: string): Promise<IPr
         };
       }),
       isOwned: false,
+      isUnlocked: false,
+      isSaved: userData.savedProfileIds.includes(profileId),
     };
   }
 };
