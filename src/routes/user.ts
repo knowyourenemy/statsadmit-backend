@@ -81,6 +81,22 @@ router
         next(new RouteError(e.message));
       }
     }
+  })
+  /**
+   * GET /api/user
+   * @returns {{username: string}}
+   * Get username from Session ID.
+   */
+  .get('/', authenticateAll, async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      return res.status(200).send({ username: req.user!.username });
+    } catch (e: any) {
+      if (e instanceof AppError) {
+        next(e);
+      } else {
+        next(new RouteError(e.message));
+      }
+    }
   });
 
 router
