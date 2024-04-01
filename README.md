@@ -1,238 +1,35 @@
-## Create Account
+# StatsAdmit Backend
 
-### POST localhost:8000/api/user
+Group Members: Aadi, DY, Vasu
 
-### Request body:
+### Prerequisites
 
-```{json}
-{
-    username: string,
-    password: string,
-    email: string
-}
+Before running the application, ensure you have the following software and tools installed:
+
+- [Node.js](https://nodejs.org/) (with npm)
+
+### Installation
+
+1. Clone this repository to your local machine
+
+2. Create `.env` file.
+
+```bash
+touch .env
 ```
 
-## Login
+3. Add environment variables to `.env` files. If you do not have access to these, please contact me.
 
-### POST localhost:8000/api/user/login
+4. Install dependencies
 
-### Request body:
-
-```{json}
-{
-    username: string,
-    password: string,
-}
+```bash
+npm i
 ```
 
-## Logout
+5. Start application using
 
-### DELETE localhost:8000/api/user/logout
-
-### Remarks:
-
-- User needs to be logged in
-
-## Create Profile
-
-### POST localhost:8000/api/profile
-
-### Request Body
-
-```{json}
-{
-    price: number,
-    schoolsAdmitted: [
-        {
-            name: string,
-            degree: string,
-            major: string,
-            status: string,
-            essays: [
-                {
-                    title: string,
-                    content: string
-                }
-            ]
-        }
-    ],
-    schoolCountry: string,
-    currentMajor: string,
-    currentSchool: string,
-    currentDescription: string,
-    testScores: [
-        {
-            test: string,
-            score: string
-        },
-    ]
-}
+```bash
+npm run dev
 ```
 
-### Response Body
-
-```{json}
-{
-    profileId: string
-}
-```
-
-### Remarks:
-
-- User needs to be logged in
-
-## Get Profile
-
-### GET localhost:8000/api/profile/:profileId
-
-### Response Body
-
-```{json}
-{
-    profileId: string,
-    userId: string,
-    username: string,
-    dateCreated: number,
-    price: number,
-    schoolsAdmitted: [
-        {
-            name: string,
-            degree: string,
-            major: string,
-            status: string,
-            essays: [
-                {
-                    title: string,
-                    content: string
-                }
-            ]
-        }
-    ],
-    schoolCountry: string,
-    purchaseCount: number,
-    testScores: [
-        {
-            test: string,
-            score: string
-        },
-    ],
-    published: boolean,
-    currentSchool: string,
-    currentMajor: string,
-    currentDescription: string,
-    imageUrl: string
-}
-```
-
-### Remarks:
-
-- User needs to be logged in
-- If profile has not been unlocked by the user or is not owned by the user, the essay responses and test scores will be redacted
-
-## Get All Profile Previews
-
-### GET localhost:8000/api/profile
-
-### Response Body
-
-```{json}
-[
-    {
-        profileId: string,
-        username: string,
-        price: number,
-        schoolsAdmitted: [
-            {
-                name: string,
-                degree: string,
-                major: string,
-                status: string,
-                essays: [],
-            }
-        ],
-        purchaseCount: number,
-        imageUrl: string
-    }
-]
-```
-
-## Get Unlocked Profile Previews
-
-### GET localhost:8000/api/profile/unlocked
-
-### Response Body
-
-```{json}
-[
-    {
-        profileId: string,
-        username: string,
-        price: number,
-        schoolsAdmitted: [
-            {
-                name: string,
-                degree: string,
-                major: string,
-                status: string,
-                essays: [],
-            }
-        ],
-        purchaseCount: number,
-        imageUrl: string
-    }
-]
-```
-
-### Remarks
-
-- User needs to be logged in
-- Essays have been deliberately excluded from schoolsAdmitted
-
-## Get Saved Profile Previews
-
-### GET localhost:8000/api/profile/saved
-
-### Response Body
-
-```{json}
-[
-    {
-        profileId: string,
-        username: string,
-        price: number,
-        schoolsAdmitted: [
-            {
-                name: string,
-                degree: string,
-                major: string,
-                status: string,
-                essays: [],
-            }
-        ],
-        purchaseCount: number,
-        imageUrl: string
-    }
-]
-```
-
-### Remarks
-
-- User needs to be logged in
-- Essays have been deliberately excluded from schoolsAdmitted
-
-## Unlock Profile
-
-### PUT localhost:8000/api/user/unlock/:profileId
-
-### Remarks
-
-- User needs to be logged in
-
-## Save Profile
-
-### PUT localhost:8000/api/user/save/:profileId
-
-### Remarks
-
-- User needs to be logged in
-- Essays have been deliberately excluded from schoolsAdmitted
+The server will be available at `http://localhost:8000`.
