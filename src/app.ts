@@ -16,7 +16,7 @@ export const makeApp = () => {
     }),
   );
   app.get('/', (req: Request, res: Response) => {
-    res.send('AdmitAsia');
+    res.send('StatsAdmit Backend');
   });
   app.use('/api/user', userRouter);
   app.use('/api/profile', profileRouter);
